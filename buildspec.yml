@@ -1,0 +1,32 @@
+version: 0.2
+
+env:
+  variables:
+    AWS_REGION: eu-central-1
+    BASE_REPO: 575108916437.dkr.ecr.eu-central-1.amazonaws.com
+    GROUP_ID: 'app/azatazen/backend-new'
+
+phases:
+  pre_build:
+    commands:
+      - echo "Start pre build ..."
+      - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${BASE_REPO}
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+
+  build:
+    commands:
+      - echo "Start build ..."
+      - docker build -t component .
+      - docker tag component ${BASE_REPO}/${GROUP_ID}:${IMAGE_TAG}
+      - docker tag component ${BASE_REPO}/${GROUP_ID}:latest
+
+  post_build:
+    commands:
+      - echo "Start post build ..."
+      - docker push ${BASE_REPO}/${GROUP_ID}:$IMAGE_TAG
+      - docker push ${BASE_REPO}/${GROUP_ID}:latest
+      - echo Writing definitions file...
+      - printf '[{"name":"azatazen-new-container","imageUri":"%s"}]' ${BASE_REPO}/${GROUP_ID}:${IMAGE_TAG} > imagedefinitions.json
+artifacts:
+  files: imagedefinitions.json
