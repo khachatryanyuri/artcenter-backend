@@ -14,14 +14,11 @@ export class CoursesService {
       throw new BadRequestError('Course picture is required');
     }
 
-    const parsedContent = parseContent(coursesDetails.content);
-
     const filePath = Environment.staticFilePath + courseFile.filename;
 
     const courses: ICourses = new Courses({
       ...coursesDetails,
       picture: filePath,
-      content: parsedContent,
     });
 
     await courses.save();
@@ -70,8 +67,6 @@ export class CoursesService {
 
     const courses: ICoursesDocument | null = await Courses.findById(courseId);
 
-    const parsedContent = parseContent(coursesDetails.content);
-
     if (!courses) {
       throw new NotFoundError('Courses not found');
     }
@@ -87,7 +82,6 @@ export class CoursesService {
     const filePaths = courseFile?.filename ? Environment.staticFilePath + courseFile.filename : undefined;
 
     courses.picture = filePaths || oldPicturePath;
-    courses.content = parsedContent;
     const updatedCourses = await courses.save();
 
     if (oldPicturePath && courseFile) {

@@ -6,23 +6,20 @@ const CourseSchema: Schema<ICourses> = new Schema<ICourses>(
   {
     title: { type: Schema.Types.Mixed, default: {} },
     description: { type: Schema.Types.Mixed, default: {} },
-    content: {
-      type: Schema.Types.Mixed,
-      default: {},
-    },
-    payment: {
-      type: Schema.Types.Mixed,
-      default: {},
-    },
-    calendlyLink: {
-      type: String,
-    },
-    startingDate: {
-      type: Date,
-      required: true,
-    },
     isCourseAvailable: { type: Boolean, default: false },
     picture: {
+      type: String,
+      required: true,
+    },
+    typesKey: {
+      type: String,
+      required: true,
+    },
+    subTypesKey: {
+      type: String,
+      required: true,
+    },
+    subTypesThemeKey: {
       type: String,
       required: true,
     },
