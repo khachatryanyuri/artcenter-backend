@@ -14,6 +14,8 @@ import MailService from './services/mailService';
 import logger from './utils/logger';
 import { LanguageRoutes } from './routes/languagesRoutes';
 import { ContentRoutes } from './routes/contentRoutes';
+import { SubTypesRoutes } from './routes/subTypes';
+import { TypesRoutes } from './routes/types';
 
 class Server {
   public app: express.Application;
@@ -27,6 +29,8 @@ class Server {
     this.app.use('/api/', new LanguageRoutes().router);
     this.app.use('/api', new CoursesRoutes().router);
     this.app.use('/api', new ContentRoutes().router);
+    this.app.use('/api', new SubTypesRoutes().router);
+    this.app.use('/api', new TypesRoutes().router);
   }
 
   public async config(): Promise<void> {

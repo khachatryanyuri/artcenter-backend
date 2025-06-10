@@ -25,27 +25,33 @@ export class TypesService {
   }
 
   public async getAllTypes(queryParams: ParsedQs): Promise<{ data: ITypes[]; total: number }> {
-    const { sort, filter, range } = queryParams;
+    const { sort, filter, range, web_filter } = queryParams;
 
     const sortArray = sort ? JSON.parse(sort as string) : [];
     const rangeArray = range ? JSON.parse(range as string) : [];
     const filterObject = filter ? JSON.parse(filter as string) : {};
+    const webFilter = web_filter ? JSON.parse(web_filter as string) : {};
 
-    const types = await Types.find(filterObject)
+    const types = await Types.find(web_filter ? { key: webFilter.key } : filterObject)
+      .populate('subTypes')
       .sort(sortArray.length ? { [sortArray[0]]: sortArray[1] === 'DESC' ? -1 : 1 } : {})
       .skip(rangeArray.length ? rangeArray[0] : 0)
       .limit(rangeArray.length ? rangeArray[1] - rangeArray[0] + 1 : 0);
 
-    const total = await Types.countDocuments();
+    const filteredTypes = filterObject.subTypes
+      ? types.filter((type) => type.subTypes.some((subType) => subType.key === filterObject.subTypes.$elemMatch.key))
+      : types;
 
-    return { data: types, total };
+    const total = filteredTypes.length;
+
+    return { data: filteredTypes, total };
   }
 
   public async getOneTypes(typeId: string): Promise<ITypes> {
     if (!mongoose.Types.ObjectId.isValid(typeId)) {
       throw new BadRequestError('Invalid type ID');
     }
-    const types: ITypes | null = await Types.findById(typeId);
+    const types: ITypes | null = await Types.findById(typeId).populate('subTypes');
 
     if (!types) {
       throw new NotFoundError('Types not found');

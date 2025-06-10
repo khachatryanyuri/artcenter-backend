@@ -5,7 +5,7 @@ import { ParsedQs } from 'qs';
 import { SubType, ISubType, ISubTypeDocument } from '../models/subTypeModel';
 import { BadRequestError, NotFoundError } from '../utils/errors';
 import { Environment } from '../utils/env';
-import { getImagePaths } from '../utils/helperse';
+import { getImagePaths, parseSubType } from '../utils/helperse';
 
 export class SubTypesService {
   public async registerSubTypes(subTypesDetails: ISubType, typeFile: Express.Multer.File): Promise<void> {
@@ -14,9 +14,10 @@ export class SubTypesService {
     }
 
     const filePath = Environment.staticFilePath + typeFile.filename;
-
+    let parsedType = parseSubType(subTypesDetails.type);
     const subTypes: ISubType = new SubType({
       ...subTypesDetails,
+      type: parsedType,
       picture: filePath,
     });
 
@@ -71,10 +72,11 @@ export class SubTypesService {
         subTypes[key] = value;
       }
     });
-
+    let parsedType = parseSubType(typeDetails.type);
     const filePaths = typeFile?.filename ? Environment.staticFilePath + typeFile.filename : undefined;
 
     subTypes.picture = filePaths || oldPicturePath;
+    subTypes.type = parsedType;
     const updatedSubTypes = await subTypes.save();
 
     if (oldPicturePath && typeFile) {

@@ -2,10 +2,10 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface ISubType extends Document {
   key: string;
-  type?: {
+  type: {
     name?: any;
     key?: string;
-  };
+  }[];
   title: any;
   desc: any;
   picture: string;
@@ -18,10 +18,12 @@ export interface ISubTypeDocument extends ISubType, Document {
 const SubTypeSchema: Schema<ISubType> = new Schema<ISubType>(
   {
     key: { type: String, required: true },
-    type: {
-      name: { type: Schema.Types.Mixed, default: {} },
-      key: { type: String },
-    },
+    type: [
+      {
+        name: { type: Schema.Types.Mixed, default: {} },
+        key: { type: String },
+      },
+    ],
     title: { type: Schema.Types.Mixed, default: {} },
     desc: { type: Schema.Types.Mixed, default: {} },
     picture: { type: String, required: true },

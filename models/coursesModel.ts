@@ -6,7 +6,6 @@ const CourseSchema: Schema<ICourses> = new Schema<ICourses>(
   {
     title: { type: Schema.Types.Mixed, default: {} },
     description: { type: Schema.Types.Mixed, default: {} },
-    isCourseAvailable: { type: Boolean, default: false },
     picture: {
       type: String,
       required: true,
