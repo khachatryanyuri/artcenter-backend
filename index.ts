@@ -16,6 +16,8 @@ import { LanguageRoutes } from './routes/languagesRoutes';
 import { ContentRoutes } from './routes/contentRoutes';
 import { SubTypesRoutes } from './routes/subTypes';
 import { TypesRoutes } from './routes/types';
+import { CoursesApplicationRoutes } from './routes/coursesApplicationRoutes';
+import { ServicesApplicationRoutes } from './routes/servicesApplicationRoutes';
 
 class Server {
   public app: express.Application;
@@ -31,6 +33,8 @@ class Server {
     this.app.use('/api', new ContentRoutes().router);
     this.app.use('/api', new SubTypesRoutes().router);
     this.app.use('/api', new TypesRoutes().router);
+    this.app.use('/api', new CoursesApplicationRoutes().router);
+    this.app.use('/api', new ServicesApplicationRoutes().router);
   }
 
   public async config(): Promise<void> {
