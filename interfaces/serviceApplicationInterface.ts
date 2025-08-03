@@ -8,7 +8,7 @@ export interface IServicesApplication extends Document {
   email: string;
   skype?: string;
   whatsapp?: string;
-  skillLevel: string;
+  telegram?: string;
 }
 
 export interface IServicesApplicationDocument extends IServicesApplication, Document {

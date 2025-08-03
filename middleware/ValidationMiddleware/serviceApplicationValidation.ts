@@ -27,11 +27,7 @@ export const validateServicesApplication = async (req: Request, res: Response, n
 
     check('whatsapp').optional().isString().withMessage('WhatsApp must be a string.'),
 
-    check('skillLevel')
-      .notEmpty()
-      .withMessage('Skill level is required.')
-      .isString()
-      .withMessage('Skill level must be a string.'),
+    check('telegram').optional().isString().withMessage('Telegram must be a string.'),
   ];
 
   try {

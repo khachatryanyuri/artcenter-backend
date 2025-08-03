@@ -32,9 +32,9 @@ const ServicesApplicationSchema: Schema<IServicesApplication> = new Schema<IServ
       type: String,
       required: false,
     },
-    skillLevel: {
+    telegram: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   {
