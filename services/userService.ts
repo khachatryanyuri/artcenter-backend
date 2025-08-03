@@ -54,11 +54,6 @@ export class UserService {
       throw new InvalidCredentials('Invalid credentials');
     }
 
-    if (user.picture) {
-      const picture = await fs.readFile(user.picture, { encoding: 'base64' });
-      user.picture = 'data:image/*;base64,' + picture;
-    }
-
     return user;
   }
 
