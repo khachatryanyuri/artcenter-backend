@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/node:18.16.1-alpine as builder
+FROM node:18.16.1-alpine as builder
 
 WORKDIR /
 
@@ -10,7 +10,7 @@ COPY . .
 
 RUN npm run build
 
-FROM public.ecr.aws/docker/library/node:18.16.1-alpine
+FROM node:18.16.1-alpine
 
 WORKDIR /
 
