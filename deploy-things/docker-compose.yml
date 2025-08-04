@@ -1,0 +1,51 @@
+services:
+  server:
+    image: ghcr.io/khachatryanyuri/artcenter-backend:${BACKEND_TAG}
+    environment:
+      - ALLOWED_ORIGIN=${ALLOWED_ORIGIN}
+      - MONGODB_URI=${MONGODB_URI}
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+      - NODE_ENV=${NODE_ENV}
+    pull_policy: always
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5001:5001"
+    networks:
+      - artcenter
+    volumes:
+      - image_data:/images
+      - application_form_files:/applicationFormFiles
+      - log_data:/logs
+
+  frontend:
+    image: ghcr.io/khachatryanyuri/artcenter-frontend:${FRONTEND_TAG}
+    environment:
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+      - NODE_ENV=${NODE_ENV}
+    pull_policy: always
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    networks:
+      - artcenter
+
+  mongodb:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASS}
+      - MONGO_INITDB_DATABASE=${DB_NAME}
+    restart: unless-stopped
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - artcenter
+
+volumes:
+  image_data:
+  log_data:
+  application_form_files:
+  mongodb-data:
+
+networks:
+  nufarm-network:
