@@ -39,7 +39,7 @@ export class TypesService {
       .limit(rangeArray.length ? rangeArray[1] - rangeArray[0] + 1 : 0);
 
     const filteredTypes = filterObject.subTypes
-      ? types.filter((type) => type.subTypes.some((subType) => subType.key === filterObject.subTypes.$elemMatch.key))
+      ? types.filter((type) => type.subTypes.some((subType: any) => subType.key === filterObject.subTypes.$elemMatch.key))
       : types;
 
     const total = filteredTypes.length;
