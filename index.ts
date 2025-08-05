@@ -57,16 +57,16 @@ class Server {
     const db = new DB();
     db.getConnection();
 
-    logger.info('Connecting with SMTP Server...');
-    const mailService = MailService.getInstance();
-    if (Environment.env === 'local') {
-      await mailService.createLocalConnection();
-    } else if (Environment.env === 'production') {
-      await mailService.createConnection();
-    }
-    logger.info('SMTP Server Connected');
-    await mailService.verifyConnection();
-    logger.info('SMTP Connection verified');
+    // logger.info('Connecting with SMTP Server...');
+    // const mailService = MailService.getInstance();
+    // if (Environment.env === 'local') {
+    //   await mailService.createLocalConnection();
+    // } else if (Environment.env === 'production') {
+    //   await mailService.createConnection();
+    // }
+    // logger.info('SMTP Server Connected');
+    // await mailService.verifyConnection();
+    // logger.info('SMTP Connection verified');
   }
   public errorHandling(): void {
     this.app.use(errorHandler);
