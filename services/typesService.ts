@@ -39,7 +39,9 @@ export class TypesService {
       .limit(rangeArray.length ? rangeArray[1] - rangeArray[0] + 1 : 0);
 
     const filteredTypes = filterObject.subTypes
-      ? types.filter((type) => type.subTypes.some((subType: any) => subType.key === filterObject.subTypes.$elemMatch.key))
+      ? types.filter((type) =>
+          type.subTypes.some((subType: any) => subType.key === filterObject.subTypes.$elemMatch.key),
+        )
       : types;
 
     const total = filteredTypes.length;
@@ -72,7 +74,7 @@ export class TypesService {
     }
 
     const oldPicturePath = types.picture;
-
+    const subTypes = types.subTypes;
     Object.entries(typeDetails).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
         types[key] = value;
@@ -82,6 +84,7 @@ export class TypesService {
     const filePaths = typeFile?.filename ? Environment.staticFilePath + typeFile.filename : undefined;
 
     types.picture = filePaths || oldPicturePath;
+    types.subTypes = subTypes;
     const updatedTypes = await types.save();
 
     if (oldPicturePath && typeFile) {

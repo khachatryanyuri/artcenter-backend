@@ -64,7 +64,6 @@ export class CoursesService {
     if (!mongoose.Types.ObjectId.isValid(courseId)) {
       throw new BadRequestError('Invalid courses ID');
     }
-
     const courses: ICoursesDocument | null = await Courses.findById(courseId);
 
     if (!courses) {
@@ -80,7 +79,7 @@ export class CoursesService {
     });
 
     const filePaths = courseFile?.filename ? Environment.staticFilePath + courseFile.filename : undefined;
-
+    courses.subTypesThemeKey = coursesDetails.typeKey ? coursesDetails.typeKey as string : coursesDetails.subTypesThemeKey;
     courses.picture = filePaths || oldPicturePath;
     const updatedCourses = await courses.save();
 

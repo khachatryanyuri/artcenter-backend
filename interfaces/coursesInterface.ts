@@ -8,6 +8,7 @@ export interface ICourses extends Document {
   subTypesThemeKey: string;
   isCourseAvailable: boolean;
   picture: string;
+  typeKey?: string;
 }
 
 export interface ICoursesDocument extends ICourses, Document {

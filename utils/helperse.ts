@@ -25,6 +25,7 @@ function parseSubType(rawType: any[]): { key: string; name: { ru: string; en: st
           name: {
             ru: parsed.name?.ru ?? '',
             en: parsed.name?.en ?? '',
+            hy: parsed.name?.hy ?? '',
           },
         };
       } catch (e) {
@@ -32,7 +33,7 @@ function parseSubType(rawType: any[]): { key: string; name: { ru: string; en: st
         return null;
       }
     })
-    .filter((item): item is { key: string; name: { ru: string; en: string } } => item !== null);
+    .filter((item): item is { key: string; name: { ru: string; en: string; hy: string } } => item !== null);
 }
 
 function getImagePaths(urls: string | string[]) {
