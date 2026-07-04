@@ -239,4 +239,83 @@ export class PaymentsService {
       throw new BadRequestError(`Failed to initiate payment: ${error.message}`);
     }
   }
+
+  public async refundPayment(paymentId: string, amountAMD: number): Promise<{ success: boolean; data: any }> {
+    const payment = await Payment.findById(paymentId);
+    if (!payment) throw new NotFoundError('Payment not found');
+    if (payment.status !== PaymentStatus.COMPLETED) throw new BadRequestError('Payment is not completed');
+    if (!payment.bankOrderId) throw new BadRequestError('Payment does not have a bank order ID');
+
+    const amountLuma = Math.round(amountAMD * 100);
+
+    const params = new URLSearchParams();
+    params.append('userName', this.userName);
+    params.append('password', this.password);
+    params.append('orderId', payment.bankOrderId);
+    params.append('amount', amountLuma.toString());
+
+    try {
+      const response = await fetch(`${this.baseUrl}/refund.do`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString()
+      });
+
+      const data = await response.json();
+      if (data.errorCode && data.errorCode !== '0') {
+        throw new Error(data.errorMessage || `Bank refund failed with code ${data.errorCode}`);
+      }
+
+      payment.status = PaymentStatus.REFUNDED;
+      await payment.save();
+
+      if (payment.applicationId) {
+        await CoursesApplication.findByIdAndUpdate(payment.applicationId, { paymentStatus: 'REFUNDED' });
+      } else if (payment.serviceApplicationId) {
+        await ServicesApplication.findByIdAndUpdate(payment.serviceApplicationId, { paymentStatus: 'REFUNDED' });
+      }
+
+      return { success: true, data };
+    } catch (error) {
+      throw new Error(`Failed to refund payment: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  public async reversePayment(paymentId: string): Promise<{ success: boolean; data: any }> {
+    const payment = await Payment.findById(paymentId);
+    if (!payment) throw new NotFoundError('Payment not found');
+    if (payment.status !== PaymentStatus.COMPLETED) throw new BadRequestError('Payment is not completed');
+    if (!payment.bankOrderId) throw new BadRequestError('Payment does not have a bank order ID');
+
+    const params = new URLSearchParams();
+    params.append('userName', this.userName);
+    params.append('password', this.password);
+    params.append('orderId', payment.bankOrderId);
+
+    try {
+      const response = await fetch(`${this.baseUrl}/reverse.do`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString()
+      });
+
+      const data = await response.json();
+      if (data.errorCode && data.errorCode !== '0') {
+        throw new Error(data.errorMessage || `Bank reverse failed with code ${data.errorCode}`);
+      }
+
+      payment.status = PaymentStatus.REVERSED;
+      await payment.save();
+
+      if (payment.applicationId) {
+        await CoursesApplication.findByIdAndUpdate(payment.applicationId, { paymentStatus: 'REVERSED' });
+      } else if (payment.serviceApplicationId) {
+        await ServicesApplication.findByIdAndUpdate(payment.serviceApplicationId, { paymentStatus: 'REVERSED' });
+      }
+
+      return { success: true, data };
+    } catch (error) {
+      throw new Error(`Failed to reverse payment: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
 }

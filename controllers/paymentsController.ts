@@ -73,4 +73,25 @@ export class PaymentsController {
       next(error);
     }
   };
+
+  public refundPayment = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const { amountAMD } = req.body;
+      const result = await this.paymentsService.refundPayment(id, amountAMD);
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public reversePayment = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const result = await this.paymentsService.reversePayment(id);
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  };
 }

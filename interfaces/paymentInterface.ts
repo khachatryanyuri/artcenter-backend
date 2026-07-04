@@ -4,7 +4,8 @@ export enum PaymentStatus {
   PENDING = 'PENDING',
   COMPLETED = 'COMPLETED',
   FAILED = 'FAILED',
-  REFUNDED = 'REFUNDED'
+  REFUNDED = 'REFUNDED',
+  REVERSED = 'REVERSED'
 }
 
 export interface IPayment extends Document {

@@ -44,5 +44,19 @@ export class PaymentsRoutes {
       authorize([ADMIN]),
       this.paymentsController.getPaymentById
     );
+
+    this.router.post(
+      '/payments/:id/refund',
+      passportConfig.authenticateJwt,
+      authorize([ADMIN]),
+      this.paymentsController.refundPayment
+    );
+
+    this.router.post(
+      '/payments/:id/reverse',
+      passportConfig.authenticateJwt,
+      authorize([ADMIN]),
+      this.paymentsController.reversePayment
+    );
   }
 }
