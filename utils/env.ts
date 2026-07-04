@@ -46,4 +46,9 @@ export class Environment {
   static facebookCallbackURL: string = this.getVariable('FACEBOOK_CLIENT_CALLBACK_URL');
   static staticFilePath: string = this.getVariable('STATIC_FILE_PATH');
   static redirectPage: string = this.getVariable('REDIRECT_PAGE');
+  
+  static inecoBankUsername: string = this.getVariable('INECOBANK_USERNAME', '');
+  static inecoBankPassword: string = this.getVariable('INECOBANK_PASSWORD', '');
+  static inecoBankApiUrl: string = this.getVariable('INECOBANK_API_URL', 'https://pg.inecoecom.am/payment/rest');
+  static paymentReturnUrl: string = this.getVariable('PAYMENT_RETURN_URL', 'http://localhost:3000/payment-result');
 }

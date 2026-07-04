@@ -36,6 +36,11 @@ const ServicesApplicationSchema: Schema<IServicesApplication> = new Schema<IServ
       type: String,
       required: false,
     },
+    paymentStatus: {
+      type: String,
+      enum: ['PENDING', 'PAID', 'FAILED'],
+      required: false,
+    },
   },
   {
     timestamps: true,

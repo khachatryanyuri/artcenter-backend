@@ -20,6 +20,15 @@ export class ServicesApplicationService {
     const rangeArray = range ? JSON.parse(range as string) : [];
     const filterObject = filter ? JSON.parse(filter as string) : {};
 
+    if (filterObject.ids) {
+      filterObject._id = {
+        $in: filterObject.ids.map((id: any) => {
+          return typeof id === 'object' && id !== null ? (id.id || id._id) : id;
+        })
+      };
+      delete filterObject.ids;
+    }
+
     const servicesApplication = await ServicesApplication.find(filterObject)
       .sort(sortArray.length ? { [sortArray[0]]: sortArray[1] === 'DESC' ? -1 : 1 } : {})
       .skip(rangeArray.length ? rangeArray[0] : 0)

@@ -7,9 +7,10 @@ import { ICoursesApplication, ICoursesApplicationDocument } from '../interfaces/
 import { CoursesApplication } from '../models/coursesApplicationModel';
 
 export class CoursesApplicationService {
-  public async registerCoursesApplication(coursesApplicationDetails: ICoursesApplication): Promise<void> {
+  public async registerCoursesApplication(coursesApplicationDetails: ICoursesApplication): Promise<ICoursesApplication> {
     const courses: ICoursesApplication = new CoursesApplication(coursesApplicationDetails);
     await courses.save();
+    return courses;
   }
 
   public async getAllCoursesApplication(
@@ -20,6 +21,16 @@ export class CoursesApplicationService {
     const sortArray = sort ? JSON.parse(sort as string) : [];
     const rangeArray = range ? JSON.parse(range as string) : [];
     const filterObject = filter ? JSON.parse(filter as string) : {};
+
+    if (filterObject.ids) {
+      filterObject._id = {
+        $in: filterObject.ids.map((id: any) => {
+          // React Admin might accidentally send full objects if references were populated
+          return typeof id === 'object' && id !== null ? (id.id || id._id) : id;
+        })
+      };
+      delete filterObject.ids;
+    }
 
     const coursesApplication = await CoursesApplication.find(filterObject)
       .sort(sortArray.length ? { [sortArray[0]]: sortArray[1] === 'DESC' ? -1 : 1 } : {})

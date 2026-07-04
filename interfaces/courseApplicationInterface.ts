@@ -10,6 +10,13 @@ export interface ICoursesApplication extends Document {
   fieldOfStudy: string;
   skillLevel: string;
   wishes?: string;
+  pricingSection?: string;
+  duration?: number;
+  package?: string;
+  participantCount?: number;
+  totalPriceAMD?: number;
+  totalPriceUSD?: number;
+  paymentStatus?: string;
 }
 
 export interface ICoursesApplicationDocument extends ICoursesApplication, Document {

@@ -31,6 +31,17 @@ export class CoursesService {
     const rangeArray = range ? JSON.parse(range as string) : [];
     const filterObject = filter ? JSON.parse(filter as string) : {};
 
+    // React-admin mapping: translate 'ids' array to MongoDB '_id: { $in: [...] }'
+    if (filterObject.ids && Array.isArray(filterObject.ids)) {
+      filterObject._id = { $in: filterObject.ids };
+      delete filterObject.ids;
+    }
+    // Translate singular 'id' to '_id'
+    if (filterObject.id) {
+      filterObject._id = filterObject.id;
+      delete filterObject.id;
+    }
+
     const courses = await Courses.find(filterObject)
       .sort(sortArray.length ? { [sortArray[0]]: sortArray[1] === 'DESC' ? -1 : 1 } : {})
       .skip(rangeArray.length ? rangeArray[0] : 0)

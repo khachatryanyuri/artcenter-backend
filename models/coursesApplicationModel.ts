@@ -46,6 +46,35 @@ const CoursesApplicationSchema: Schema<ICoursesApplication> = new Schema<ICourse
       type: String,
       required: false,
     },
+    pricingSection: {
+      type: String,
+      required: false,
+    },
+    duration: {
+      type: Number,
+      required: false,
+    },
+    package: {
+      type: String,
+      required: false,
+    },
+    participantCount: {
+      type: Number,
+      required: false,
+    },
+    totalPriceAMD: {
+      type: Number,
+      required: false,
+    },
+    totalPriceUSD: {
+      type: Number,
+      required: false,
+    },
+    paymentStatus: {
+      type: String,
+      required: false,
+      default: 'PENDING',
+    },
   },
   { timestamps: true },
 );

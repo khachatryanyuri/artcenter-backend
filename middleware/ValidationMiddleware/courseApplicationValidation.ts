@@ -37,6 +37,12 @@ export const validateCourseApplication = async (req: Request, res: Response, nex
     check('skillLevel').notEmpty().withMessage('Skill level is required.'),
 
     check('wishes').optional().isString().withMessage('Wishes must be a string.'),
+
+    check('pricingSection').optional().isString(),
+    check('duration').optional().isNumeric(),
+    check('package').optional().isString(),
+    check('totalPriceAMD').optional().isNumeric(),
+    check('totalPriceUSD').optional().isNumeric(),
   ];
 
   try {

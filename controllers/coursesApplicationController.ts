@@ -8,8 +8,8 @@ const coursesApplicationService = new CoursesApplicationService();
 export class CoursesApplicationController {
   public async registerCoursesApplication(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      await coursesApplicationService.registerCoursesApplication(req.body);
-      res.status(201).json({ message: 'Courses Application registered successfully' });
+      const courseApp = await coursesApplicationService.registerCoursesApplication(req.body);
+      res.status(201).json({ id: courseApp.id || (courseApp as any)._id, message: 'Courses Application registered successfully' });
       logger.info(`Status Code: ${res.statusCode} - Message: Courses Application registered was successfully`);
     } catch (error) {
       next(error);

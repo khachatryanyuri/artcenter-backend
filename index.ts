@@ -10,6 +10,7 @@ import { DB } from './utils/db';
 import { Environment } from './utils/env';
 import { PassportConfig } from './utils/passport';
 import { errorHandler } from './middleware/errorHandler';
+import { CronService } from './services/cronService';
 import MailService from './services/mailService';
 import logger from './utils/logger';
 import { LanguageRoutes } from './routes/languagesRoutes';
@@ -18,6 +19,8 @@ import { SubTypesRoutes } from './routes/subTypes';
 import { TypesRoutes } from './routes/types';
 import { CoursesApplicationRoutes } from './routes/coursesApplicationRoutes';
 import { ServicesApplicationRoutes } from './routes/servicesApplicationRoutes';
+import { LessonPricingRoutes } from './routes/lessonPricingRoutes';
+import { PaymentsRoutes } from './routes/paymentsRoutes';
 
 class Server {
   public app: express.Application;
@@ -35,6 +38,8 @@ class Server {
     this.app.use('/api', new TypesRoutes().router);
     this.app.use('/api', new CoursesApplicationRoutes().router);
     this.app.use('/api', new ServicesApplicationRoutes().router);
+    this.app.use('/api', new LessonPricingRoutes().router);
+    this.app.use('/api', new PaymentsRoutes().router);
   }
 
   public async config(): Promise<void> {
@@ -73,6 +78,8 @@ class Server {
   }
 
   public start(): void {
+    new CronService().init();
+    
     this.app.listen(this.app.get('port'), () => {
       logger.info(`API is running at http://localhost:${this.app.get('port')}`);
     });

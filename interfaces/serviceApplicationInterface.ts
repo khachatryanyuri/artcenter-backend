@@ -9,6 +9,7 @@ export interface IServicesApplication extends Document {
   skype?: string;
   whatsapp?: string;
   telegram?: string;
+  paymentStatus?: 'PENDING' | 'PAID' | 'FAILED';
 }
 
 export interface IServicesApplicationDocument extends IServicesApplication, Document {
