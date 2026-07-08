@@ -5,7 +5,9 @@ export enum PaymentStatus {
   COMPLETED = 'COMPLETED',
   FAILED = 'FAILED',
   REFUNDED = 'REFUNDED',
-  REVERSED = 'REVERSED'
+  PARTIALLY_REFUNDED = 'PARTIALLY_REFUNDED',
+  REVERSED = 'REVERSED',
+  EXPIRED = 'EXPIRED',
 }
 
 export interface IPayment extends Document {
@@ -14,6 +16,7 @@ export interface IPayment extends Document {
   orderNumber: string; // Our internal human-readable ID
   bankOrderId?: string; // The orderId returned by InecoBank
   amountAMD: number;
+  refundedAmountAMD: number;
   currency: string;
   status: PaymentStatus;
   bankErrorCode?: number;

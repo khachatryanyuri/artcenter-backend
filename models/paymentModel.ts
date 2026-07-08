@@ -26,6 +26,11 @@ const PaymentSchema: Schema<IPayment> = new Schema<IPayment>(
       type: Number,
       required: true,
     },
+    refundedAmountAMD: {
+      type: Number,
+      default: 0,
+      required: true,
+    },
     currency: {
       type: String,
       default: '051', // AMD

@@ -30,10 +30,6 @@ export class Environment {
   static smtpPassword: string = this.getVariable('SMTP_PASSWORD');
   static smtpSender: string = this.getVariable('SMTP_SENDER');
   static env: string = this.getVariable('NODE_ENV');
-  static merchantId: string = this.getVariable('MERCHANT_ID');
-  static merchantUsername: string = this.getVariable('MERCHANT_USERNAME');
-  static merchantPassword: string = this.getVariable('MERCHANT_PASSWORD');
-  static merchantIsTest: string = this.getVariable('MERCHANT_IS_TEST');
   static resetLink: string = this.getVariable('RESET_LINK');
   static dbBaseDelayMs: string | number = this.getVariable('MONGO_BASE_DELAY_MS') || 1000;
   static dbMaxDelayMs: string | number = this.getVariable('MONGO_MAX_DELAY_MS') || 30000;
@@ -51,4 +47,5 @@ export class Environment {
   static inecoBankPassword: string = this.getVariable('INECOBANK_PASSWORD', '');
   static inecoBankApiUrl: string = this.getVariable('INECOBANK_API_URL', 'https://pg.inecoecom.am/payment/rest');
   static paymentReturnUrl: string = this.getVariable('PAYMENT_RETURN_URL', 'http://localhost:3000/payment-result');
+  static frontendBaseUrl: string = this.getVariable('FRONTEND_BASE_URL', 'http://localhost:3000');
 }

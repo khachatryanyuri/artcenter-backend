@@ -2,14 +2,25 @@ import { Request, Response, NextFunction } from 'express';
 
 import logger from '../utils/logger';
 import { CoursesApplicationService } from '../services/coursesApplicationService';
+import { PaymentsService } from '../services/paymentsService';
 
 const coursesApplicationService = new CoursesApplicationService();
+const paymentsService = new PaymentsService();
 
 export class CoursesApplicationController {
   public async registerCoursesApplication(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const courseApp = await coursesApplicationService.registerCoursesApplication(req.body);
-      res.status(201).json({ id: courseApp.id || (courseApp as any)._id, message: 'Courses Application registered successfully' });
+      const responseData: any = { id: courseApp.id || (courseApp as any)._id, message: 'Courses Application registered successfully' };
+      
+      if (courseApp.totalPriceAMD && courseApp.totalPriceAMD > 0) {
+        const paymentResult = await paymentsService.checkout(responseData.id.toString());
+        if (paymentResult.formUrl) {
+          responseData.formUrl = paymentResult.formUrl;
+        }
+      }
+      
+      res.status(201).json(responseData);
       logger.info(`Status Code: ${res.statusCode} - Message: Courses Application registered was successfully`);
     } catch (error) {
       next(error);
