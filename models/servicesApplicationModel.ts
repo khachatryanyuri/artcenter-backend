@@ -38,7 +38,7 @@ const ServicesApplicationSchema: Schema<IServicesApplication> = new Schema<IServ
     },
     paymentStatus: {
       type: String,
-      enum: ['PENDING', 'PAID', 'FAILED', 'REFUNDED', 'REVERSED'],
+      enum: ['PENDING', 'PAID', 'FAILED', 'REFUNDED', 'PARTIALLY_REFUNDED', 'REVERSED', 'EXPIRED'],
       required: false,
     },
   },
