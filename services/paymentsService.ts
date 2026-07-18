@@ -307,7 +307,7 @@ export class PaymentsService {
       path: 'serviceApplicationId',
       select: 'fieldOfService',
     });
-    
+
     if (!payment) {
       throw new NotFoundError('Payment not found');
     }
@@ -338,7 +338,7 @@ export class PaymentsService {
       const response = await axios.post(`${this.baseUrl}/register.do`, payload.toString(), {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
-      
+
       logger.info(`[PaymentsService] Bank response for Service Application ${application._id}: errorCode=${response.data.errorCode}`);
 
       const { orderId, formUrl, errorCode, errorMessage } = response.data;
